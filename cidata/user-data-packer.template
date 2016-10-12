@@ -66,5 +66,7 @@ runcmd:
   - "env DEBIAN_FRONTEND=noninteractive aptitude -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold upgrade -y"
   - "usermod -aG lxd ubuntu"
   - "usermod -aG docker ubuntu"
+  - "systemctl disable apt-daily.service"
+  - "systemctl disable apt-daily.timer"
 
 --===============88888888888888888888888888==
