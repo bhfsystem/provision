@@ -68,5 +68,7 @@ runcmd:
   - "usermod -aG docker ubuntu"
   - "systemctl disable apt-daily.service"
   - "systemctl disable apt-daily.timer"
+  - "systemctl disable cron"
+  - "systemctl disable anacron"
 
 --===============88888888888888888888888888==
