@@ -17,16 +17,23 @@ users:
 
 manage_etc_hosts: true
 
-lxd:
-  init:
-    network_address: 0.0.0.0
-    network_port: 8443
-    trust_password: ubuntu
-  bridge:
-    mode: existing
-    name: br0
+write_files:
+ - owner: root:root
+   path: /etc/apt/apt.conf.d/99boxcache
+   permissions: '0644'
+   content: |
+       Acquire::http::Proxy "http://cache.nih:3128";
+       Acquire::Languages "none";
+
+packages:
+ - openssh-server
+ - aptitude
 
 runcmd:
- - "sudo -H -u ubuntu bash -c 'cd; ln -nfs ../sv/consul service/; exec bash -l script/server screen' || true"
+  - "aptitude purge -y open-iscsi nano mlocate ubuntu-release-upgrader-core update-manager-core"
+  - "systemctl disable apt-daily.service"
+  - "systemctl disable apt-daily.timer"
+  - "systemctl disable cron"
+  - "systemctl disable anacron"
 
 --===============88888888888888888888888888==

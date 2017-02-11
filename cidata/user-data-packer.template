@@ -22,50 +22,15 @@ write_files:
    path: /etc/apt/apt.conf.d/99boxcache
    permissions: '0644'
    content: |
-       Acquire::http::Proxy "http://${CACHE_VIP}:3128";
+       Acquire::http::Proxy "http://cache.nih:3128";
        Acquire::Languages "none";
-
-lxd:
-  init:
-    network_address: 0.0.0.0
-    network_port: 8443
-    trust_password: ubuntu
-  bridge:
-    mode: existing
-    name: br0
 
 packages:
  - openssh-server
  - aptitude
- - ntp
- - curl
- - unzip
- - git
- - perl
- - ruby
- - language-pack-en
- - nfs-common
- - build-essential
- - dkms
- - lvm2
- - xfsprogs
- - xfsdump
- - bridge-utils
- - thin-provisioning-tools
- - software-properties-common
- - btrfs-tools
- - ubuntu-fan
- - linux-generic
- - ifmetric
 
 runcmd:
   - "aptitude purge -y open-iscsi nano mlocate ubuntu-release-upgrader-core update-manager-core"
-  - "add-apt-repository -y ppa:ubuntu-lxc/lxd-stable"
-  - "aptitude update"
-  - "env DEBIAN_FRONTEND=noninteractive aptitude -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold install -y lxd lxd-tools criu docker.io"
-  - "env DEBIAN_FRONTEND=noninteractive aptitude -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold upgrade -y"
-  - "usermod -aG lxd ubuntu"
-  - "usermod -aG docker ubuntu"
   - "systemctl disable apt-daily.service"
   - "systemctl disable apt-daily.timer"
   - "systemctl disable cron"
